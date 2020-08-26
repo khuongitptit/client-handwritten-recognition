@@ -1,0 +1,27 @@
+.post {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 600px;
+    margin-top: 70px;
+    border: 1px solid rgb(185, 182, 182);
+    .author {
+        .avatar {
+            width: 40px;
+            height: auto;
+            border-radius: 50%;
+            border: 1px solid rgb(148, 139, 139);
+        }
+        .name {
+            margin-left: 10px;
+        }
+    }
+    .content {
+        .photo {
+            width: 100%;
+        }
+    }
+    .interaction {
+    }
+}

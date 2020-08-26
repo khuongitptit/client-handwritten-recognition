@@ -1,0 +1,20 @@
+.menu-container {
+    .ant-menu {
+        .logo {
+            .logo-img {
+                width: 40px;
+                height: auto;
+            }
+        }
+        .search {
+        }
+        .account {
+            .avatar {
+                width: 50px;
+                height: auto;
+                border-radius: 50%;
+                border: 1px solid rgb(182, 181, 181);
+            }
+        }
+    }
+}
