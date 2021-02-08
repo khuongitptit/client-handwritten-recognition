@@ -1,4 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap');
 .app {
-    font-family: "Raleway", sans-serif;
+  font-family: 'Raleway', sans-serif;
+  //config
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover,
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected {
+    color: inherit;
+    border-bottom: 2px solid transparent;
+  }
 }
