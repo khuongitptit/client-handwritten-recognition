@@ -1,0 +1,13 @@
+@keyframes expandAddPost {
+  from {
+      height: 0;
+  }
+  to {
+      height: 100%;
+  }
+}
+.add-post {
+  .add-post-controller {
+      animation: expandAddPost 0.5s;
+  }
+}

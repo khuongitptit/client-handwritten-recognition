@@ -1,0 +1,5 @@
+export default {
+  APP_LOAD: 'APP_LOAD',
+  APP_LOADED: 'APP_LOADED',
+  APP_LOAD_FAIL: 'APP_LOAD_FAIL'
+}

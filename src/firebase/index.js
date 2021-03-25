@@ -11,4 +11,11 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-export default firebase;
+
+const storage = firebase.storage();
+
+export const uploadFile = async file => {
+  const storageRef = storage.ref(`/photos/${file.name}`);
+  await storageRef.put(file);
+  return storageRef.getDownloadURL();
+};

@@ -1,0 +1,65 @@
+.login-signup-wrapper {
+  width: 50%;
+  margin-left: 25%;
+  max-width: 1000px;
+  margin-top: 100px;
+  .login-image-slider {
+    width: 217px;
+    position: relative;
+    top: -460px;
+    left: 130px;
+  }
+  .login-signup-inner {
+    width: 800px;
+  }
+  .phone {
+    width: 400px;
+  }
+  .card,
+  .redirect-card {
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #dbdbdb;
+    max-width: 350px;
+    min-width: 350px;
+    a {
+      color: #0195f6;
+    }
+  }
+  .card {
+    .logo {
+      font-family: 'Billabong';
+      font-size: 55px;
+      margin-bottom: 20px;
+      text-align: center;
+      user-select: none;
+    }
+    .login-btn,
+    .signup-btn {
+      width: 100%;
+    }
+    .facebook-login {
+      text-align: center;
+      cursor: pointer;
+      .facebook-icon {
+        width: 18px;
+        margin-right: 10px;
+      }
+    }
+  }
+  .redirect-card {
+    margin-top: 10px;
+    padding: 20px 0 20px 0px;
+    text-align: center;
+  }
+}
+@media screen and (max-width: 850px) {
+  .left{
+    display: none !important;
+  }
+  .right{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

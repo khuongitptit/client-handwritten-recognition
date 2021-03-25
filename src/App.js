@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import routes from './routes/';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Menu from './components/menu';
+import Menu from './components/Menu';
+import { appLoad } from './actions/app';
 import 'antd/dist/antd.css';
 import './App.scss';
-const App = () => {
+import { connect } from 'react-redux';
+const App = (props) => {
+  useEffect(() => {
+    props.appLoad();
+  }, []);
   const mapRoutes = () => {
     return routes.map((route, index) => {
-      return (
-        <Route key={index} path={route.path} exact={route.exact} component={route.component} />
-      );
+      return <Route key={index} path={route.path} exact={route.exact} component={route.component} />;
     });
   };
   return (
@@ -21,4 +24,10 @@ const App = () => {
     </div>
   );
 };
-export default App;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    appLoad: () => dispatch(appLoad()),
+  };
+};
+export default connect(null, mapDispatchToProps)(App);
