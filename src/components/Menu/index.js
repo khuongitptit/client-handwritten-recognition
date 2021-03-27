@@ -1,14 +1,20 @@
-import React from 'react';
-import { Menu, Input, Popover, Row, Col } from 'antd';
+import React, { useState } from 'react';
+import _ from 'lodash';
+import { Input, Popover, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import { SearchOutlined, HomeOutlined, HeartOutlined, UserOutlined } from '@ant-design/icons';
 import Notification from './Notification';
 import './index.scss';
-const { Item } = Menu;
-const MenuComponent = () => {
+import { searchProfile } from '../../actions/profile';
+import { connect } from 'react-redux';
+import SearchProfileDropdown from './SearchProfileDropdown';
+
+const MenuComponent = props => {
+  const [foundProfiles, setFoundProfiles] = useState([]);
   const onSearch = value => {
-    console.log('value', value);
+    props.searchProfile({ keyword: value }).then(data => setFoundProfiles(data));
   };
+  const onSearchDebounce = _.debounce(value => onSearch(value), 500);
   return (
     <div className='app-menu'>
       <Row className='app-menu-inner h-center'>
@@ -18,16 +24,10 @@ const MenuComponent = () => {
           </Link>
         </Col>
         <Col span={12}>
-          <Input
-            className='menu-search h-center'
-            prefix={<SearchOutlined />}
-            placeholder='Search'
-            allowClear
-            onChange={onSearch}
-          />
+          <SearchProfileDropdown foundProfiles={foundProfiles} onChange={value => onSearchDebounce(value)} />
         </Col>
         <Col span={6} className='menu-right'>
-          <Row className="h-center menu-right-inner">
+          <Row className='h-center menu-right-inner'>
             <Col span={8}>
               <Link to='/'>
                 <HomeOutlined className='home-icon menu-icon' />
@@ -51,4 +51,15 @@ const MenuComponent = () => {
   );
 };
 
-export default MenuComponent;
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    searchProfile: payload => {
+      return searchProfile(payload)(dispatch);
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(MenuComponent);
