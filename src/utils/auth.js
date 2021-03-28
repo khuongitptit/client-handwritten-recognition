@@ -19,3 +19,11 @@ export const checkAuth = () => {
   }
   return true;
 }
+
+export const getCurrentUser = () => {
+  const authData = JSON.parse(localStorage.getItem('auth')) || {};
+  if (_.isEmpty(authData)) {
+    return null;
+  }
+  return _.get(authData, 'username');
+}

@@ -1,19 +1,20 @@
 import React from 'react';
+import _ from 'lodash';
 import { Dropdown, Input, Menu } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined ,LoadingOutlined } from '@ant-design/icons';
 const { Item } = Menu;
 
 const SearchProfileDropdown = props => {
-  const { foundProfiles } = props;
+  const { foundProfiles, loading } = props;
   const menu = () => {
     return (
       <Menu>
-        {foundProfiles.map(profile => (
-          <Item key={profile._id}>
+        {!loading ? foundProfiles.map(profile => (
+          <Item key={profile._id} onClick={() => props.onSelect(profile.username)}>
             <img src='' />
             <span>{profile.username}</span>
           </Item>
-        ))}
+        )) : <Item style={{textAlign:'center'}}><LoadingOutlined /></Item>}
       </Menu>
     );
   };

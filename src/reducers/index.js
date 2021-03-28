@@ -1,3 +1,3 @@
 import { combineReducers } from 'redux';
-
-export default combineReducers({});
+import signup from './signup';
+export default combineReducers({ signup });

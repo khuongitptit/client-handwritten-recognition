@@ -8,5 +8,6 @@ export default {
     '/images/login/6.JPG',
   ],
   SIGNUP: 'SIGNUP',
+  SIGNUP_INFO: 'SIGNUP_INFO',
   LOGIN : 'LOGIN'
 };

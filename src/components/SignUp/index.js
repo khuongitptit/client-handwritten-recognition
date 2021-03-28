@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
-import { Row, Col, Form, Input, Divider, Button, message } from 'antd';
+import { Select, Form, Input, Divider, Button, message } from 'antd';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import code2Text from '../../utils/code2Text';
 import './index.scss';
 import { signUp } from '../../actions/auth';
+import baseConstants from '../../constants/base';
 import { EMAIL_REGEX, FULLNAME_REGEX, PASSWORD_REGEX, USERNAME_REGEX } from '../../utils/regex';
-
+const MONTHS = baseConstants.MONTHS;
+const { Option } = Select;
+const steps = ['MAIN_INFO', 'BIRTHDAY_INFO', 'EMAIL_VERIFICATION'];
+const nextStep = step => {
+  return steps[_.indexOf(steps, step) + 1];
+};
 const Signup = props => {
+  const [step, setStep] = useState(_.head(steps));
   const [loading, setLoading] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const [formError, setFormError] = useState('');
-  const onFinish = values => {
+  const [birthday, setBirthday] = useState({
+    date: new Date().getDate(),
+    month: MONTHS[new Date().getMonth()],
+    year: new Date().getFullYear(),
+  });
+  const onFinish = (step, values) => {
     setLoading(true);
     props
       .onSubmit(values)
@@ -21,12 +33,15 @@ const Signup = props => {
         console.log('res', data);
         setTimeout(() => {
           setLoading(false);
-          setRedirect(true);
-          notify('success', 'signup_successful');
+          // notify('success', 'signup_successful');
+          setStep(nextStep(step));
+          if (step === _.last(steps)) {
+            setRedirect(true);
+          }
         }, 1000);
       })
       .catch(err => {
-        console.log("err",err)
+        console.log('err', err);
         setTimeout(() => {
           setLoading(false);
           setFormError(code2Text[err.message]);
@@ -39,11 +54,9 @@ const Signup = props => {
   const notify = (result, code) => {
     message[result](code2Text[code], 5);
   };
-  return redirect ? (
-    <Redirect to='login' />
-  ) : (
-    <div className='login-signup-wrapper'>
-      <div className='card'>
+  const renderMainInfo = () => {
+    return (
+      <div className='card main_info'>
         <p className='logo'>Instagram</p>
         <p className='signup-subtitle'>Sign up to see photos and videos from your friends.</p>
         <FacebookLogin
@@ -59,7 +72,12 @@ const Signup = props => {
           )}
         />
         <Divider>OR</Divider>
-        <Form name='normal_login' className='form' initialValues={{ remember: true }} onFinish={onFinish}>
+        <Form
+          name='normal_login'
+          className='form'
+          initialValues={{ remember: true }}
+          onFinish={values => onFinish('MAIN_INFO', values)}
+        >
           <Form.Item
             hasFeedback
             name='email'
@@ -100,11 +118,9 @@ const Signup = props => {
           >
             <Input.Password placeholder='Password' />
           </Form.Item>
-          {
-            formError!== '' && <Form.Item style={{margin:'-10px 0px 10px 0', color:'#ff4c4c'}}>
-              {formError}
-            </Form.Item>
-          }
+          {formError !== '' && (
+            <Form.Item style={{ margin: '-10px 0px 10px 0', color: '#ff4c4c' }}>{formError}</Form.Item>
+          )}
           <Form.Item>
             <Button type='primary' htmlType='submit' className='signup-btn' loading={loading}>
               Sign up
@@ -112,6 +128,73 @@ const Signup = props => {
           </Form.Item>
         </Form>
       </div>
+    );
+  };
+
+  const onChangeBirthday = (type,value) => {
+    setBirthday({...birthday,[type]: value});
+  };
+
+  const renderBirthdayInfo = () => {
+    return (
+      <div className='card main_info'>
+        <p className='signup-title'>Add Your Birthday</p>
+        <p className='signup-subtitle'>This won't be a part of your public profile.</p>
+        <Form
+          name='normal_login'
+          className='form'
+          initialValues={birthday}
+          onFinish={values => onFinish('BIRTHDAY_INFO', {birthday: values})}
+        >
+          <Form.Item name='month'>
+            <Select onSelect={value => onChangeBirthday('month', value)} value={birthday.month}>
+              {MONTHS.map((month, index) => (
+                <Option value={month} key={index}>
+                  {month}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name='date'>
+            <Select onSelect={value => onChangeBirthday('date', value)} value={birthday.date}>
+              {_.range(1, new Date(birthday.year, birthday.month, 0).getDate()).map(date => (
+                <Option value={date}>{date}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name='year'>
+            <Select onSelect={value => onChangeBirthday('year', value)} value={birthday.year}>
+              {_.range(1910, 2021, 1).map(year => (
+                <Option value={year} key={year}>
+                  {year}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          {formError !== '' && (
+            <Form.Item style={{ margin: '-10px 0px 10px 0', color: '#ff4c4c' }}>{formError}</Form.Item>
+          )}
+          <Form.Item>
+            <Button type='primary' htmlType='submit' className='signup-btn' loading={loading}>
+              Next
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    );
+  };
+
+  const renderStep = {
+    MAIN_INFO: renderMainInfo(),
+    BIRTHDAY_INFO: renderBirthdayInfo(),
+  };
+
+  console.log('1111111111111', step);
+  return redirect ? (
+    <Redirect to='login' />
+  ) : (
+    <div className='login-signup-wrapper'>
+      {renderStep[step]}
       <div className='redirect-card'>
         Have an account? <Link to='/login'>Log in</Link>
       </div>
