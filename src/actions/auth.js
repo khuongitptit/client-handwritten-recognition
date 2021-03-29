@@ -20,3 +20,21 @@ export const signUp = payload => {
       });
     }
 }
+
+export const updateAccount = payload => {
+  return (dispatch) => {
+    dispatch({type: authConstants.UPDATE_ACCOUNT, payload});
+    const state = store.getState();
+    const accountId = _.get(state, 'signup._id') || _.get(state, 'auth._id');
+    return authRequest.updateAccount(accountId, payload);
+  }
+}
+
+export const verifyEmail = payload => {
+  return dispatch => {
+    dispatch({type: authConstants.VERIFY_EMAIL, payload});
+    const state = store.getState();
+    const accountId = _.get(state, 'signup._id') || _.get(state, 'auth._id');
+    return authRequest.verifyEmail(accountId, payload);
+  }
+}

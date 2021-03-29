@@ -53,6 +53,13 @@
     text-align: center;
   }
 }
+.login-signup-wrapper.signup {
+  .card.main_info, .redirect-card {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
 @media screen and (max-width: 850px) {
   .left{
     display: none !important;

@@ -5,13 +5,13 @@ import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import code2Text from '../../utils/code2Text';
-import './index.scss';
-import { signUp } from '../../actions/auth';
+import { signUp, updateAccount } from '../../actions/auth';
 import baseConstants from '../../constants/base';
+import EmailVerification from './EmailVerification';
 import { EMAIL_REGEX, FULLNAME_REGEX, PASSWORD_REGEX, USERNAME_REGEX } from '../../utils/regex';
 const MONTHS = baseConstants.MONTHS;
 const { Option } = Select;
-const steps = ['MAIN_INFO', 'BIRTHDAY_INFO', 'EMAIL_VERIFICATION'];
+const steps = ['MAIN_INFO', 'EMAIL_VERIFICATION', 'BIRTHDAY_INFO'];
 const nextStep = step => {
   return steps[_.indexOf(steps, step) + 1];
 };
@@ -27,7 +27,8 @@ const Signup = props => {
   });
   const onFinish = (step, values) => {
     setLoading(true);
-    props
+    if(steps.indexOf(step) === 0) {
+      props
       .onSubmit(values)
       .then(data => {
         console.log('res', data);
@@ -38,6 +39,28 @@ const Signup = props => {
           if (step === _.last(steps)) {
             setRedirect(true);
           }
+        }, 1000);
+      })
+      .catch(err => {
+        console.log('err', err);
+        setTimeout(() => {
+          setLoading(false);
+          setFormError(code2Text[err.message]);
+        }, 1000);
+      });
+      return;
+    }
+    props
+      .onUpdateAccount(values)
+      .then(data => {
+        console.log('res111111111111', data);
+        setTimeout(() => {
+          setLoading(false);
+          // notify('success', 'signup_successful');
+          // setStep(nextStep(step));
+          // if (step === _.last(steps)) {
+          //   setRedirect(true);
+          // }
         }, 1000);
       })
       .catch(err => {
@@ -186,15 +209,15 @@ const Signup = props => {
 
   const renderStep = {
     MAIN_INFO: renderMainInfo(),
+    EMAIL_VERIFICATION: <EmailVerification next={() => setStep(nextStep(step))}/>,
     BIRTHDAY_INFO: renderBirthdayInfo(),
   };
 
-  console.log('1111111111111', step);
   return redirect ? (
     <Redirect to='login' />
   ) : (
-    <div className='login-signup-wrapper'>
-      {renderStep[step]}
+    <div className='login-signup-wrapper signup'>
+      {renderStep[props.step || step]}
       <div className='redirect-card'>
         Have an account? <Link to='/login'>Log in</Link>
       </div>
@@ -208,5 +231,8 @@ const mapDispatchToProps = dispatch => ({
   onSubmit: payload => {
     return signUp(payload)(dispatch);
   },
+  onUpdateAccount: payload => {
+    return updateAccount(payload)(dispatch);
+  }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);
