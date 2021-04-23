@@ -11,14 +11,6 @@
     'Open Sans', 'Helvetica Neue', sans-serif;
   height: 100vh;
   background-color: #fafafa;
-  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover,
-  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected {
-    color: inherit;
-    border-bottom: 2px solid transparent;
-  }
-  .ant-btn {
-    background-color: #0095f6;
-  }
   .h-center {
     position: relative;
     left: 50%;
@@ -29,10 +21,40 @@
     top: 50%;
     transform: translateY(-50%);
   }
-  a{
-    color: black;
-  }
-  .ant-form-item-explain {
-    color: #ff4c4c;
+  .character-recognize {
+    position: relative;
+    top: 150px;
+    text-align: center;
+    width: 750px;
+    height: 450px;
+    margin: 0 auto;
+    padding: 10px;
+    border-radius: 2px;
+    background: #e8e8e8;
+    border: 1px solid rgb(87, 75, 75);
+    .upload-image {
+      cursor: pointer;
+    }
+    .choose-image {
+      width: 150px;
+      height: 150px;
+      background-color: rgb(186, 186, 229);
+      text-align: center;
+      .v-center {
+        font-size: 30px;
+      }
+    }
+    .btn-submit {
+      width: 150px;
+      font-size: 20px;
+      height: 50px;
+      margin-top: 10px;
+    }
+    .result {
+      margin-top: 50px;
+      .number {
+        color: rgb(248, 68, 68);
+      }
+    }
   }
 }
