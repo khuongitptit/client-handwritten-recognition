@@ -8,7 +8,7 @@ const Recognition = () => {
   const [file, setFile] = useState([]);
   const [base64Image, setBase64Image] = useState('');
   const [recognizedLabel, setRecognizedLabel] = useState(null);
-  const [euclideanDistance, setEuclideanDistance] = useState(null);
+  const [cosineDistance, setCosineDistance] = useState(null);
   const beforeUpload = file => {
     setFile(file);
     return false;
@@ -30,7 +30,7 @@ const Recognition = () => {
     recognize({ img: base64Image })
       .then(data => {
         setRecognizedLabel(_.get(data, 'recognized.label'));
-        setEuclideanDistance(_.get(data, 'euclideanDistance'));
+        setCosineDistance(_.get(data, 'cosineDistance'));
       })
       .catch(err => {
         console.log('err', err);
@@ -53,7 +53,7 @@ const Recognition = () => {
       </Button>
       <div className='result'>
         {recognizedLabel && <Title level={2}>Chữ cái nhận diện là: <span className="number">{recognizedLabel}</span></Title>}
-        {euclideanDistance && <Title level={4}>Khoảng cách Euclid: <span className="number">{euclideanDistance}</span></Title>}
+        {cosineDistance && <Title level={4}>Khoảng cách Cosine: <span className="number">{cosineDistance}</span></Title>}
       </div>
     </div>
   );
