@@ -77,13 +77,25 @@ const Recognition = () => {
       transformImg(file);
     }, 1000);
   };
+  const _getLabel = (_character, _case) => {
+    if(_case === 'upper') {
+      return _.toUpper(_character);
+    }
+    if(_case === 'lower') {
+      return _.toLower(_character);
+    }
+    return _.toLower(_character) + " hoặc " + _.toUpper(_character);
+  }
   const handleProcess = () => {
     const outputImg = document.getElementById('output');
     const data = outputImg.toDataURL();
-    console.log('data', data);
     recognize({ img: data })
       .then(data => {
-        setRecognizedLabel(_.get(data, 'recognized.label'));
+        const rawLabel = _.get(data, 'recognized.label');
+        const _character = _.split(rawLabel, '_')[0];
+        const _case = _.split(rawLabel, '_')[1];
+        const label = _getLabel(_character, _case);
+        setRecognizedLabel(label);
         setCosineDistance(_.get(data, 'cosineDistance'));
       })
       .catch(err => {
