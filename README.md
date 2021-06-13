@@ -1,5 +1,5 @@
 # Requirements
 NodeJS
 # Run:
-npm install\n
+npm install
 npm start
