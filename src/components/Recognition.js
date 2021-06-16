@@ -48,8 +48,10 @@ const Recognition = () => {
           points[i].push(p);
         }
       }
-      _.remove(points, (item, index) => index === 0); //remove first element, which is the rectangle frame
+      _.remove(points, item => _.find(item, coord => coord.x === 0 && coord.y === 0)); //remove first element, which is the rectangle frame
+      console.log("points",points);
       const contourData = _.flatten(points); //find coordinates of top-left and bottom-right corners
+      console.log("contourData",contourData);
       const minX = _.minBy(contourData, coord => coord.x);
       const maxX = _.maxBy(contourData, coord => coord.x);
       const minY = _.minBy(contourData, coord => coord.y);
