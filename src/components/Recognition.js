@@ -48,11 +48,12 @@ const Recognition = () => {
           points[i].push(p);
         }
       }
-      const coutourData = _.maxBy(points, contour => _.size(contour)); //find coordinates of top-left and bottom-right corners
-      const minX = _.minBy(coutourData, coord => coord.x);
-      const maxX = _.maxBy(coutourData, coord => coord.x);
-      const minY = _.minBy(coutourData, coord => coord.y);
-      const maxY = _.maxBy(coutourData, coord => coord.y);
+      _.remove(points, (item, index) => index === 0); //remove first element, which is the rectangle frame
+      const contourData = _.flatten(points); //find coordinates of top-left and bottom-right corners
+      const minX = _.minBy(contourData, coord => coord.x);
+      const maxX = _.maxBy(contourData, coord => coord.x);
+      const minY = _.minBy(contourData, coord => coord.y);
+      const maxY = _.maxBy(contourData, coord => coord.y);
       const topLeft = { x: minX.x, y: minY.y };
       const bottomRight = { x: maxX.x, y: maxY.y };
       let dst3 = src3.roi(new cv.Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y)); //crop image
